@@ -7,7 +7,6 @@ namespace CompositionAggregation.Tests.TestTypes
     {
         public int Compare(int[] x, int[] y)
         {
-
             if (x == null && y != null)
             {
                 return 1;
@@ -28,15 +27,15 @@ namespace CompositionAggregation.Tests.TestTypes
                 return 1;
             }
 
-            int MinX = x.Min();
-            int MinY = y.Min();
+            int minX = x.Min();
+            int minY = y.Min();
 
-            if (MinX == MinY)
+            if (minX == minY)
             {
                 return 0;
             }
 
-            if (MinX > MinY)
+            if (minX > minY)
             {
                 return -1;
             }

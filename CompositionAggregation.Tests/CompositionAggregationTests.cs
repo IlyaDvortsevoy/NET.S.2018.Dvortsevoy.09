@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 using CompositionAggregation.Tests.TestTypes;
+using NUnit.Framework;
 
 namespace CompositionAggregation.Tests
 {
@@ -269,7 +269,7 @@ namespace CompositionAggregation.Tests
             var array = new int[0][];
 
             Assert.That(
-                () => BubbleSort.Sort(array, comparer : null),
+                () => BubbleSort.Sort(array, comparer: null),
                 Throws.TypeOf<ArgumentException>());
         }
         #endregion

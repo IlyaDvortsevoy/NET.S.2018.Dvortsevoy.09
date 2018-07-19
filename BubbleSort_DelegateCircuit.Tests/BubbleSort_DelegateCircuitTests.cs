@@ -303,7 +303,6 @@ namespace BubbleSort_DelegateCircuit.Tests
             [ValueSource(nameof(SourceMaxMin))] int[][] initial,
             [ValueSource(nameof(ResultMaxAsc))] int[][] result)
         {
-
             BubbleSort_delegate.Sort(initial, new MaxSortAsc());
 
             CollectionAssert.AreEqual(initial, result);
@@ -314,7 +313,6 @@ namespace BubbleSort_DelegateCircuit.Tests
             [ValueSource(nameof(SourceMaxMin))] int[][] initial,
             [ValueSource(nameof(ResultMaxDesc))] int[][] result)
         {
-
             BubbleSort_delegate.Sort(initial, new MaxSortDesc());
 
             CollectionAssert.AreEqual(initial, result);
@@ -325,7 +323,6 @@ namespace BubbleSort_DelegateCircuit.Tests
             [ValueSource(nameof(SourceMaxMin))] int[][] initial,
             [ValueSource(nameof(ResultMinAsc))] int[][] result)
         {
-
             BubbleSort_delegate.Sort(initial, new MinSortAsc());
 
             CollectionAssert.AreEqual(initial, result);
@@ -336,7 +333,6 @@ namespace BubbleSort_DelegateCircuit.Tests
             [ValueSource(nameof(SourceMaxMin))] int[][] initial,
             [ValueSource(nameof(ResultMinDesc))] int[][] result)
         {
-
             BubbleSort_delegate.Sort(initial, new MinSortDesc());
 
             CollectionAssert.AreEqual(initial, result);

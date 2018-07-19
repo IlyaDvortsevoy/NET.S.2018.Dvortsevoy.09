@@ -7,7 +7,6 @@ namespace CompositionAggregation.Tests.TestTypes
     {
         public int Compare(int[] x, int[] y)
         {
-
             if (x == null && y != null)
             {
                 return 1;
@@ -28,15 +27,15 @@ namespace CompositionAggregation.Tests.TestTypes
                 return 1;
             }
 
-            int MaxX = x.Max();
-            int MaxY = y.Max();
+            int maxX = x.Max();
+            int maxY = y.Max();
 
-            if (MaxX == MaxY)
+            if (maxX == maxY)
             {
                 return 0;
             }
 
-            if (MaxX > MaxY)
+            if (maxX > maxY)
             {
                 return -1;
             }

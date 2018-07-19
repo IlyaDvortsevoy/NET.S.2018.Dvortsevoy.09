@@ -44,7 +44,7 @@ namespace CompositionAggregation
             {
                 for (int j = 0; j < array.Length - i - 1; j++)
                 {
-                    if (comparer.Compare(array[j], array[j+1]) > 0)
+                    if (comparer.Compare(array[j], array[j + 1]) > 0)
                     {
                         Swap(ref array[j], ref array[j + 1]);
                     }

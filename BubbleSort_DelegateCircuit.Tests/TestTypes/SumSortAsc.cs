@@ -16,7 +16,7 @@ namespace BubbleSort_DelegateCircuitTests.TestTypes
                 return 1;
             }
 
-            if (x.Length == 0 && y.Length > 0 )
+            if (x.Length == 0 && y.Length > 0)
             {
                 return -1;
             }
@@ -26,28 +26,28 @@ namespace BubbleSort_DelegateCircuitTests.TestTypes
                 return 1;
             }
 
-            int SumX = 0;
-            int SumY = 0;
+            int sumX = 0;
+            int sumY = 0;
 
             checked
             {
                 foreach (int item in x)
                 {
-                    SumX += item;
+                    sumX += item;
                 }
 
                 foreach (int item in y)
                 {
-                    SumY += item;
+                    sumY += item;
                 }
             }
 
-            if (SumX == SumY)
+            if (sumX == sumY)
             {
                 return 0;
             }
 
-            if (SumX > SumY)
+            if (sumX > sumY)
             {
                 return 1;
             }
