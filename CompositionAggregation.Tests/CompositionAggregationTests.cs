@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using CompositionAggregation.Tests.TestTypes;
 
 namespace CompositionAggregation.Tests
 {
@@ -190,8 +191,8 @@ namespace CompositionAggregation.Tests
             new int[][]
             {
                 new int[] { 10, 308, -77, 0, 11 }, // -77
-                new int[] { 1, 2, 3, 0, 4 }, // 0
                 new int[] { 321, 111, 17, 0, 14 }, // 0
+                new int[] { 1, 2, 3, 0, 4 }, // 0
                 new int[] { 12, 5, 7, 6, 8 }, // 5
                 new int[] { 120, 300 } // 120
             },
@@ -223,8 +224,8 @@ namespace CompositionAggregation.Tests
             {
                 new int[] { 120, 300 }, // 120
                 new int[] { 12, 5, 7, 6, 8 }, // 5
-                new int[] { 1, 2, 3, 0, 4 }, // 0
                 new int[] { 321, 111, 17, 0, 14 }, // 0
+                new int[] { 1, 2, 3, 0, 4 }, // 0
                 new int[] { 10, 308, -77, 0, 11 } // -77
             },
 
@@ -245,161 +246,93 @@ namespace CompositionAggregation.Tests
 
         #region Validation Tests
         [Test]
-        public void SortBySumAsc_throws_ArgumentNullException()
+        public void ValidateArray_Method_Throws_ArgumentNullException_If_Array_Is_Null()
         {
             Assert.That(
-                () => BubbleSort.SortBySumAsc(null),
+                () => BubbleSort.Sort(null, new MaxSortAsc()),
                 Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
-        public void SortBySumAsc_throws_ArgumentException()
+        public void ValidateComparer_Method_Throws_ArgumentNullException_If_Comparer_Is_Null()
         {
-            var array = new int[0][];
+            var array = new int[1][];
 
             Assert.That(
-                () => BubbleSort.SortBySumAsc(array),
-                Throws.TypeOf<ArgumentException>());
-        }
-
-        [Test]
-        public void SortBySumDesc_throws_ArgumentNullException()
-        {
-            Assert.That(
-                () => BubbleSort.SortBySumDesc(null),
+                () => BubbleSort.Sort(array, comparer: null),
                 Throws.TypeOf<ArgumentNullException>());
         }
 
         [Test]
-        public void SortBySumDesc_throws_ArgumentException()
+        public void ValidateArray_Method_Throws_ArgumentException_If_Array_Is_Empty()
         {
             var array = new int[0][];
 
             Assert.That(
-                () => BubbleSort.SortBySumDesc(array),
-                Throws.TypeOf<ArgumentException>());
-        }
-
-        [Test]
-        public void SortByMaxAsc_throws_ArgumentNullException()
-        {
-            Assert.That(
-                () => BubbleSort.SortByMaxAsc(null),
-                Throws.TypeOf<ArgumentNullException>());
-        }
-
-        [Test]
-        public void SortByMaxAsc_throws_ArgumentException()
-        {
-            var array = new int[0][];
-
-            Assert.That(
-                () => BubbleSort.SortByMaxAsc(array),
-                Throws.TypeOf<ArgumentException>());
-        }
-
-        [Test]
-        public void SortByMaxDesc_throws_ArgumentNullException()
-        {
-            Assert.That(
-                () => BubbleSort.SortByMaxDesc(null),
-                Throws.TypeOf<ArgumentNullException>());
-        }
-
-        [Test]
-        public void SortByMaxDesc_throws_ArgumentException()
-        {
-            var array = new int[0][];
-
-            Assert.That(
-                () => BubbleSort.SortByMaxDesc(array),
-                Throws.TypeOf<ArgumentException>());
-        }
-
-        [Test]
-        public void SortByMinAsc_throws_ArgumentNullException()
-        {
-            Assert.That(
-                () => BubbleSort.SortByMinAsc(null),
-                Throws.TypeOf<ArgumentNullException>());
-        }
-
-        [Test]
-        public void SortByMinAsc_throws_ArgumentException()
-        {
-            var array = new int[0][];
-
-            Assert.That(
-                () => BubbleSort.SortByMinAsc(array),
-                Throws.TypeOf<ArgumentException>());
-        }
-
-        [Test]
-        public void SortByMinDesc_throws_ArgumentNullException()
-        {
-            Assert.That(
-                () => BubbleSort.SortByMinDesc(null),
-                Throws.TypeOf<ArgumentNullException>());
-        }
-
-        [Test]
-        public void SortByMinDesc_throws_ArgumentException()
-        {
-            var array = new int[0][];
-
-            Assert.That(
-                () => BubbleSort.SortByMinDesc(array),
+                () => BubbleSort.Sort(array, comparer : null),
                 Throws.TypeOf<ArgumentException>());
         }
         #endregion
 
         #region Main Functionality Tests
         [Test, Sequential]
-        public void SortBySumAsc_pass_tests_successfully(
+        public void SumSortAsc_pass_tests_successfully(
             [ValueSource(nameof(SourceSum))] int[][] initial,
             [ValueSource(nameof(ResultSumAsc))] int[][] result)
-        {
-            Assert.That(BubbleSort.SortBySumAsc(initial), Is.EquivalentTo(result));
+        {          
+            BubbleSort.Sort(initial, new SumSortAsc());
+
+            CollectionAssert.AreEqual(initial, result);
         }
 
         [Test, Sequential]
-        public void SortBySumDesc_pass_tests_successfully(
+        public void SumSortDesc_pass_tests_successfully(
             [ValueSource(nameof(SourceSum))] int[][] initial,
             [ValueSource(nameof(ResultSumDesc))] int[][] result)
         {
-            Assert.That(BubbleSort.SortBySumDesc(initial), Is.EquivalentTo(result));
+            BubbleSort.Sort(initial, new SumSortDesc());
+
+            CollectionAssert.AreEqual(initial, result);
         }
 
         [Test, Sequential]
-        public void SortByMaxAsc_pass_tests_successfully(
+        public void MaxSortAsc_pass_tests_successfully(
             [ValueSource(nameof(SourceMaxMin))] int[][] initial,
             [ValueSource(nameof(ResultMaxAsc))] int[][] result)
         {
-            Assert.That(BubbleSort.SortByMaxAsc(initial), Is.EquivalentTo(result));
+            BubbleSort.Sort(initial, new MaxSortAsc());
+
+            CollectionAssert.AreEqual(initial, result);
         }
 
         [Test, Sequential]
-        public void SortByMaxDesc_pass_tests_successfully(
+        public void MaxSortDesc_pass_tests_successfully(
             [ValueSource(nameof(SourceMaxMin))] int[][] initial,
             [ValueSource(nameof(ResultMaxDesc))] int[][] result)
         {
-            Assert.That(BubbleSort.SortByMaxDesc(initial), Is.EquivalentTo(result));
+            BubbleSort.Sort(initial, new MaxSortDesc());
+
+            CollectionAssert.AreEqual(initial, result);
         }
 
         [Test, Sequential]
-        public void SortByMinAsc_pass_tests_successfully(
+        public void MinSortAsc_pass_tests_successfully(
             [ValueSource(nameof(SourceMaxMin))] int[][] initial,
             [ValueSource(nameof(ResultMinAsc))] int[][] result)
         {
-            Assert.That(BubbleSort.SortByMinAsc(initial), Is.EquivalentTo(result));
+            BubbleSort.Sort(initial, new MinSortAsc());
+
+            CollectionAssert.AreEqual(initial, result);
         }
 
         [Test, Sequential]
-        public void SortByMinDesc_pass_tests_successfully(
+        public void MinSortDesc_pass_tests_successfully(
             [ValueSource(nameof(SourceMaxMin))] int[][] initial,
             [ValueSource(nameof(ResultMinDesc))] int[][] result)
         {
-            Assert.That(BubbleSort.SortByMinDesc(initial), Is.EquivalentTo(result));
+            BubbleSort.Sort(initial, new MinSortDesc());
+
+            CollectionAssert.AreEqual(initial, result);
         }
         #endregion
     }
