@@ -8,197 +8,92 @@ namespace CompositionAggregation
     /// </summary>
     public static class BubbleSort
     {
-        #region Fields
-        private static SortedList<int, int> list =
-            new SortedList<int, int>(new CustomComparer());
-        #endregion
-
         #region Public Methods
         /// <summary>
-        /// Fulfills ascending sortion of the rows of a jagged array according to the sum of row elements
+        /// Fulfills <see cref="T:System.Collections.Generic.IComparer{T}"/> intreface closed
+        /// sort of the rows of a jagged array according to the certain criteria
         /// </summary>
         /// <param name="array"> The jagged array to sort </param>
-        /// <returns> Sorted jagged array </returns>
-        /// <exception cref="ArgumentNullException"> In case if the jagged array is null </exception>
-        /// <exception cref="ArgumentException"> In case if the jagged array equals to zero </exception>
-        public static int[][] SortBySumAsc(int[][] array)
+        /// <param name="comparer"> Interface reference to the object defining sorting criteria </param>
+        public static void Sort(int[][] array, IComparer<int[]> comparer)
         {
             ValidateArray(array);
-            СountSums(array);
+            ValidateComparer(comparer);
 
-            return OrderRowsAscending(array);
+            FulfillSort(array, comparer);
         }
 
         /// <summary>
-        /// Fulfills descending sortion of the rows of a jagged array according to the sum of row elements
+        /// Sorts jagged array
         /// </summary>
         /// <param name="array"> The jagged array to sort </param>
-        /// <returns> Sorted jagged array </returns>
-        /// <exception cref="ArgumentNullException"> In case if the jagged array is null </exception>
-        /// <exception cref="ArgumentException"> In case if the jagged array equals to zero </exception>
-        public static int[][] SortBySumDesc(int[][] array)
+        /// <param name="comparison"> Delegate defining sorting criteria </param>
+        public static void Sort(int[][] array, Comparison<int[]> comparison)
         {
             ValidateArray(array);
-            СountSums(array);
+            ValidateComparison(comparison);
 
-            return OrderRowsDescending(array);
-        }
-
-        /// <summary>
-        /// Fulfills ascending sortion of the rows of a jagged array according to the maximum element of each row
-        /// </summary>
-        /// <param name="array"> The jagged array to sort </param>
-        /// <returns> Sorted jagged array </returns>
-        /// <exception cref="ArgumentNullException"> In case if the jagged array is null </exception>
-        /// <exception cref="ArgumentException"> In case if the jagged array equals to zero </exception>
-        public static int[][] SortByMaxAsc(int[][] array)
-        {
-            ValidateArray(array);
-            СalculateMax(array);
-
-            return OrderRowsAscending(array);
-        }
-
-        /// <summary>
-        /// Fulfills descending sortion of the rows of a jagged array according to the maximum element of each row
-        /// </summary>
-        /// <param name="array"> The jagged array to sort </param>
-        /// <returns> Sorted jagged array </returns>
-        /// <exception cref="ArgumentNullException"> In case if the jagged array is null </exception>
-        /// <exception cref="ArgumentException"> In case if the jagged array equals to zero </exception>
-        public static int[][] SortByMaxDesc(int[][] array)
-        {
-            ValidateArray(array);
-            СalculateMax(array);
-
-            return OrderRowsDescending(array);
-        }
-
-        /// <summary>
-        /// Fulfills ascending sortion of the rows of a jagged array according to the minimal element of each row
-        /// </summary>
-        /// <param name="array"> The jagged array to sort </param>
-        /// <returns> Sorted jagged array </returns>
-        /// <exception cref="ArgumentNullException"> In case if the jagged array is null </exception>
-        /// <exception cref="ArgumentException"> In case if the jagged array equals to zero </exception>
-        public static int[][] SortByMinAsc(int[][] array)
-        {
-            ValidateArray(array);
-            СalculateMin(array);
-
-            return OrderRowsAscending(array);
-        }
-
-        /// <summary>
-        /// Fulfills descending sortion of the rows of a jagged array according to the minimal element of each row
-        /// </summary>
-        /// <param name="array"> The jagged array to sort </param>
-        /// <returns> Sorted jagged array </returns>
-        /// <exception cref="ArgumentNullException"> In case if the jagged array is null </exception>
-        /// <exception cref="ArgumentException"> In case if the jagged array equals to zero </exception>
-        public static int[][] SortByMinDesc(int[][] array)
-        {
-            ValidateArray(array);
-            СalculateMin(array);
-
-            return OrderRowsDescending(array);
+            FulfillSort(array, new ComparisonAdapter(comparison));
         }
         #endregion
 
         #region Private Helper Methods
-        private static void ValidateArray(int[][] array)
+        private static void FulfillSort(int[][] array, IComparer<int[]> comparer)
+        {
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                for (int j = 0; j < array.Length - i - 1; j++)
+                {
+                    if (comparer.Compare(array[j], array[j+1]) > 0)
+                    {
+                        Swap(ref array[j], ref array[j + 1]);
+                    }
+                }
+            }
+        }
+
+        private static void Swap(ref int[] leftArray, ref int[] rightArray)
+        {
+            int[] tempArray = leftArray;
+            leftArray = rightArray;
+            rightArray = tempArray;
+        }
+
+        private static void ValidateArray(int[][] array) 
         {
             if (array == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(
+                    "Parameter can't be null",
+                    nameof(array));
             }
-            else if (array.Length == 0)
+
+            if (array.Length == 0)
             {
-                throw new ArgumentException();
+                throw new ArgumentException(
+                    "Array can't be empty",
+                    nameof(array));
+            }            
+        }
+
+        private static void ValidateComparer(IComparer<int[]> comparer)
+        {
+            if (comparer == null)
+            {
+                throw new ArgumentNullException(
+                    "Parameter can't be null",
+                    nameof(comparer));
             }
         }
 
-        private static void СountSums(int[][] array)
+        private static void ValidateComparison(Comparison<int[]> comparison)
         {
-            list.Clear();
-
-            for (int i = 0; i < array.Length; i++)
+            if (comparison == null)
             {
-                int sum = 0;
-
-                for (int j = 0; j < array[i].Length; j++)
-                {
-                    sum += array[i][j];
-                }
-
-                list.Add(sum, i);
+                throw new ArgumentNullException(
+                    "Parameter can't be null",
+                    nameof(comparison));
             }
-        }
-
-        private static void СalculateMax(int[][] array)
-        {
-            list.Clear();
-
-            for (int i = 0; i < array.Length; i++)
-            {
-                int max = array[i][0];
-
-                for (int j = 0; j < array[i].Length; j++)
-                {
-                    if (array[i][j] > max)
-                    {
-                        max = array[i][j];
-                    }
-                }
-
-                list.Add(max, i);
-            }
-        }
-
-        private static void СalculateMin(int[][] array)
-        {
-            list.Clear();
-
-            for (int i = 0; i < array.Length; i++)
-            {
-                int min = array[i][0];
-
-                for (int j = 0; j < array[i].Length; j++)
-                {
-                    if (array[i][j] < min)
-                    {
-                        min = array[i][j];
-                    }
-                }
-
-                list.Add(min, i);
-            }
-        }
-
-        private static int[][] OrderRowsAscending(int[][] array)
-        {
-            int[][] resultingArray = new int[array.Length][];
-            int counter = 0;
-
-            foreach (int value in list.Values)
-            {
-                resultingArray[counter++] = array[value];
-            }
-
-            return resultingArray;
-        }
-
-        private static int[][] OrderRowsDescending(int[][] array)
-        {
-            int[][] resultingArray = new int[array.Length][];
-            int counter = array.Length - 1;
-
-            foreach (int value in list.Values)
-            {
-                resultingArray[counter--] = array[value];
-            }
-
-            return resultingArray;
         }
         #endregion
     }
